@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRA Group | Legal Recovery Service Blueprint - Current State</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0D3B62;
+  --phase-hdr-bg: #1a4a72;
+  --accent: #6BAADF;
+  --accent-cta: #A7D16C;
+  --accent-light: #e3f1fa;
+  --warn: #c8600a;
+  --warn-light: #fef0e3;
+  --card-bg: #ffffff;
+  --border: #e2e8f0;
+  --border-dark: #c8d4e4;
+  --stakeholder-bg: #e6ecf5;
+  --text-body: #333333;
+  --text-muted: #5a6a80;
+  --phase-w: 350px;
+  --card-w: 310px;
+  --stk-w: 160px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'Open Sans', system-ui, sans-serif;
+  background: #F4F6F8;
+  color: var(--text-body);
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- HEADER --- */
+.hdr {
+  background: var(--primary);
+  padding: 13px 24px;
+  display: flex; align-items: center; gap: 18px;
+  flex-shrink: 0;
+  border-bottom: 3px solid var(--accent-cta);
+  z-index: 200;
+}
+.hdr-logo { font-family: 'Open Sans', sans-serif; font-size: 17px; font-weight: 800; color: #fff; white-space: nowrap; flex-shrink: 0; letter-spacing: -0.3px; }
+.hdr-logo em { color: var(--accent-cta); font-style: normal; }
+.hdr-sep { width: 1px; height: 32px; background: rgba(255,255,255,0.15); flex-shrink: 0; }
+.hdr-meta { flex: 1; min-width: 0; }
+.hdr-eye { font-size: 8px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent-cta); margin-bottom: 2px; }
+.hdr-title { font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 700; color: #fff; line-height: 1.25; }
+.hdr-sub { font-size: 11px; color: rgba(255,255,255,0.78); margin-top: 2px; line-height: 1.4; max-width: 620px; }
+.hdr-btns { display: flex; gap: 8px; flex-shrink: 0; }
+.btn { padding: 7px 15px; border-radius: 4px; font-size: 11px; font-weight: 700; border: none; cursor: pointer; font-family: inherit; transition: all 0.15s; letter-spacing: 0.3px; }
+.btn-fill { background: var(--accent-cta); color: var(--primary); }
+.btn-fill:hover { filter: brightness(1.08); }
+.btn-ghost { background: transparent; color: rgba(255,255,255,0.92); border: 1.5px solid rgba(255,255,255,0.55); }
+.btn-ghost:hover { border-color: rgba(255,255,255,0.85); color: #fff; }
+
+/* --- LEGEND BAR --- */
+.legend-bar {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 24px;
+  display: flex; align-items: center; gap: 16px;
+  flex-shrink: 0;
+  overflow-x: auto; scrollbar-width: none;
+  z-index: 190;
+}
+.legend-bar::-webkit-scrollbar { display: none; }
+.legend-label { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--primary); white-space: nowrap; margin-right: 4px; flex-shrink: 0; }
+.pchips { display: flex; gap: 6px; }
+.pchip {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 14px 6px 6px;
+  border-radius: 40px; border: none;
+  background: transparent; cursor: pointer; transition: background 0.15s;
+  white-space: nowrap; flex-shrink: 0;
+  text-align: left;
+}
+.pchip:hover { background: #f0f4fa; }
+.pavatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  overflow: hidden; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 10px; font-weight: 700;
+}
+.pinfo { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+.pname { font-size: 11px; font-weight: 700; color: var(--text-body); line-height: 1.2; }
+.prole { font-size: 9px; color: var(--text-muted); line-height: 1.2; font-weight: 400; }
+.legend-sep { width: 1px; height: 28px; background: var(--border); flex-shrink: 0; }
+.legend-keys { display: flex; gap: 14px; flex-shrink: 0; }
+.lkey { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--text-muted); white-space: nowrap; }
+.lkey-swatch { width: 10px; height: 10px; border-radius: 50%; }
+
+/* --- FLOATING FILTER BAR --- */
+.filter-bar {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 7px 24px;
+  display: flex; align-items: center; gap: 10px;
+  flex-shrink: 0;
+  overflow-x: auto; scrollbar-width: none;
+  z-index: 185;
+  min-height: 38px;
+}
+.filter-bar::-webkit-scrollbar { display: none; }
+.filter-bar-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--text-muted);
+  white-space: nowrap; flex-shrink: 0;
+}
+.fchips { display: flex; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0; }
+.fchips::-webkit-scrollbar { display: none; }
+.fchip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px 5px 8px;
+  border-radius: 20px; border: 1.5px solid var(--border-dark);
+  font-size: 10px; font-weight: 600; color: var(--text-muted);
+  background: #fff;
+  white-space: nowrap; flex-shrink: 0;
+  cursor: pointer; transition: all 0.15s;
+  font-family: inherit;
+}
+.fchip:hover { border-color: #a0aab8; color: var(--text-body); }
+.fchip.active { color: #fff; }
+.fchip .fchip-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.fchip.active .fchip-dot { transform: scale(1.1); }
+.fchip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.filter-clear {
+  padding: 4px 10px; border-radius: 4px;
+  border: 1px solid var(--border-dark); background: transparent;
+  font-size: 10px; font-weight: 600; color: var(--text-muted);
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  transition: all 0.15s; font-family: inherit;
+}
+.filter-clear:hover { background: #f0f2f5; color: var(--text-body); border-color: #a0aab8; }
+.filter-clear:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.filter-count {
+  font-size: 10px; color: var(--text-muted); font-weight: 400;
+  white-space: nowrap; flex-shrink: 0;
+}
+
+/* --- CANVAS --- */
+main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.canvas-wrap { flex: 1; display: flex; overflow: auto; min-height: 0; align-items: flex-start; }
+
+/* --- STAKEHOLDERS SIDEBAR --- */
+.stk-col {
+  position: sticky; left: 0; z-index: 80;
+  width: var(--stk-w); flex-shrink: 0;
+  background: var(--stakeholder-bg);
+  border-right: 1px solid var(--border-dark);
+  align-self: flex-start;
+}
+.stk-phase-spacer {
+  height: 30px; background: var(--primary);
+  border-bottom: 1px solid rgba(107,170,223,0.25);
+  position: sticky; top: 0; z-index: 88;
+}
+.stk-header {
+  height: 52px; background: var(--primary);
+  display: flex; align-items: flex-end; padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: sticky; top: 30px; z-index: 85;
+}
+.stk-header-txt { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.75); }
+.stk-cell {
+  padding: 14px 10px;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.stk-cell.conn-row { height: 38px; }
+.stk-group-label {
+  font-size: 10px; font-weight: 800; color: var(--primary);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 2px; padding: 0 1px;
+}
+.stkchip {
+  position: relative; display: inline-flex; align-items: center;
+  gap: 6px; padding: 5px 9px; border-radius: 20px;
+  background: #fff; border: 1px solid #c0cade;
+  font-size: 10px; font-weight: 600; color: var(--text-body);
+  cursor: default; width: fit-content; transition: border-color 0.15s;
+}
+.stkchip:hover { border-color: var(--accent); }
+.stk-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.stk-tip {
+  position: absolute; left: calc(100% + 9px); top: 50%; transform: translateY(-50%);
+  background: var(--primary); color: #fff;
+  font-size: 11px; font-weight: 400; line-height: 1.55;
+  padding: 10px 13px; border-radius: 8px;
+  width: 215px; white-space: normal;
+  opacity: 0; pointer-events: none; transition: opacity 0.15s;
+  z-index: 350; box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+}
+.stk-tip::before {
+  content: ''; position: absolute; right: 100%; top: 50%; transform: translateY(-50%);
+  border: 6px solid transparent; border-right-color: var(--primary);
+}
+.stkchip:hover .stk-tip { opacity: 1; }
+
+/* --- CANVAS BODY --- */
+.canvas-outer { min-width: max-content; display: flex; flex-direction: column; }
+.phase-group-row {
+  display: flex; position: sticky; top: 0; z-index: 55;
+  min-width: max-content;
+}
+.phase-group {
+  background: var(--primary);
+  border-bottom: 1px solid rgba(107,170,223,0.25);
+  border-right: 1px solid rgba(107,170,223,0.15);
+  height: 30px; display: flex; align-items: center;
+  padding: 0 14px;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--accent-cta);
+  white-space: nowrap;
+}
+.phase-group:last-child { border-right: none; }
+.canvas-body { display: flex; min-width: max-content; position: relative; }
+.phase-col { flex-shrink: 0; min-width: var(--phase-w); position: relative; }
+.phase-hdr {
+  background: var(--phase-hdr-bg); padding: 10px 14px;
+  height: 52px; display: flex; align-items: center; gap: 10px;
+  border-bottom: 2px solid rgba(107,170,223,0.45);
+  position: sticky; top: 30px; z-index: 50;
+}
+.phase-hdr-txt { flex: 1; min-width: 0; }
+.phase-num { font-size: 9px; font-weight: 700; letter-spacing: 2px; color: var(--accent-cta); text-transform: uppercase; margin-bottom: 2px; }
+.phase-name { font-family: 'Open Sans', sans-serif; font-size: 13px; font-weight: 800; color: #fff; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0; }
+.phase-sub { font-size: 9px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 2px; font-weight: 400; }
+
+/* --- DEPS/RISKS HEADER BUTTON & POPOVER --- */
+.phase-dr-btn {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.15s;
+  font-family: inherit; padding: 0;
+}
+.phase-dr-btn:hover { background: rgba(255,255,255,0.2); color: #fff; border-color: rgba(255,255,255,0.4); }
+.phase-dr-btn:focus-visible { outline: 2px solid var(--accent-cta); outline-offset: 2px; }
+.phase-dr-btn.has-items::after {
+  content: ''; position: absolute; top: -2px; right: -2px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--warn);
+}
+.phase-dr-btn { position: relative; }
+
+.dr-pop {
+  position: fixed;
+  background: #fff; border: 1px solid var(--border-dark);
+  border-radius: 12px; padding: 18px 20px;
+  width: 340px; max-height: 420px; overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(13,59,98,0.2), 0 2px 8px rgba(13,59,98,0.08);
+  z-index: 500; opacity: 0; pointer-events: none;
+  transform: translateY(-5px); transition: all 0.15s;
+}
+.dr-pop.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+.dr-pop-title {
+  font-size: 14px; font-weight: 800; color: var(--primary);
+  margin-bottom: 14px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.dr-section-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 6px; margin-top: 14px;
+}
+.dr-section-label.dep-label { color: var(--accent); }
+.dr-section-label.risk-label { color: var(--warn); }
+.dr-section-label:first-of-type { margin-top: 0; }
+.dr-item {
+  font-size: 12px; color: #4a5565; line-height: 1.6;
+  padding: 8px 10px; border-radius: 6px;
+  margin-bottom: 6px;
+}
+.dr-item.dep-item { background: #f0f6fc; border-left: 3px solid var(--accent); }
+.dr-item.risk-item { background: var(--warn-light); border-left: 3px solid var(--warn); }
+.dr-cross-label {
+  font-size: 8px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: #b0b8c6;
+  margin-top: 16px; margin-bottom: 6px;
+  padding-top: 12px; border-top: 1px solid var(--border);
+}
+
+/* --- LANE CELLS --- */
+.lane-cell {
+  padding: 20px 16px;
+  display: flex; flex-direction: row; flex-wrap: wrap; gap: 14px; align-items: flex-start;
+  background: #fff;
+}
+.lane-cell.front-lane { background: #fff; }
+.lane-cell.back-lane  { background: #fafbfd; }
+.lane-cell.supp-lane  { background: #f9f8fb; }
+.lane-cell.empty      { background: #fff; }
+.lane-cell.conn-row {
+  padding: 0; display: flex; align-items: center;
+  position: relative; height: 38px;
+  background: #fff;
+}
+.conn-label {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-size: 8px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--text-muted); background: #fff; padding: 2px 12px; z-index: 2;
+  white-space: nowrap; opacity: 0.7;
+}
+.conn-line {
+  position: absolute; top: 50%; left: 0; right: 0; height: 0;
+  border-top: 2px dashed #c8d4e4; z-index: 1;
+}
+
+/* --- CARDS --- */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px;
+  width: var(--card-w); max-width: 100%;
+  cursor: pointer; transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(13,59,98,0.1), 0 1px 4px rgba(13,59,98,0.06);
+  position: relative; overflow: visible;
+  z-index: 4;
+}
+.card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 8px 28px rgba(13,59,98,0.15), 0 2px 6px rgba(13,59,98,0.08);
+  transform: translateY(-3px);
+}
+.card.dimmed { opacity: 0.14; pointer-events: none; }
+
+/* PAIN BADGE */
+.pain-badge {
+  position: absolute; top: -9px; right: -9px;
+  width: 26px; height: 23px;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  background: var(--warn); color: #fff;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding-bottom: 3px;
+  cursor: pointer; z-index: 20;
+  border: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.pain-badge:hover { transform: scale(1.18); filter: brightness(1.15); }
+
+.card-hdr { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.card-av {
+  width: 32px; height: 32px; border-radius: 50%;
+  overflow: hidden; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 10px; font-weight: 700;
+}
+.card-meta { flex: 1; min-width: 0; }
+.card-title { font-size: 12px; font-weight: 700; color: var(--primary); line-height: 1.3; }
+.card-plabel { font-size: 10px; color: var(--text-muted); font-weight: 400; letter-spacing: 0.2px; margin-top: 2px; }
+.badge { padding: 3px 7px; border-radius: 20px; font-size: 9px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
+.badge-fill { background: var(--primary); color: #fff; }
+.badge-gate { background: var(--warn-light); color: #7a3a08; border: 1.5px solid var(--warn); }
+.card-quote {
+  font-size: 12px; color: #4a5565; line-height: 1.65;
+  padding-left: 10px; border-left: 3px solid var(--accent);
+  font-style: italic;
+}
+
+/* --- PAIN POPOVER --- */
+.pain-pop {
+  position: fixed;
+  background: #fff; border: 1.5px solid var(--warn);
+  border-radius: 10px; padding: 14px;
+  width: 275px;
+  box-shadow: 0 8px 28px rgba(200,96,10,0.16);
+  z-index: 500; opacity: 0; pointer-events: none;
+  transform: translateY(-5px); transition: all 0.15s;
+}
+.pain-pop.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+.pain-pop-title { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #7a3a08; margin-bottom: 7px; }
+.pain-pop-txt { font-size: 12px; color: #4a5565; line-height: 1.6; }
+
+/* --- MODAL --- */
+.modal-wrap {
+  position: fixed; inset: 0;
+  background: rgba(5,18,40,0.6); z-index: 600;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px; opacity: 0; pointer-events: none;
+  transition: opacity 0.2s; backdrop-filter: blur(3px);
+}
+.modal-wrap.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: #fff; border-radius: 14px; padding: 28px 30px;
+  max-width: 620px; width: 100%; max-height: 88vh; overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(5,18,40,0.28);
+  transform: translateY(14px); transition: transform 0.2s; position: relative;
+}
+.modal-wrap.open .modal { transform: translateY(0); }
+.modal-x {
+  position: absolute; top: 13px; right: 13px;
+  width: 28px; height: 28px; border-radius: 50%; border: none;
+  background: #edf0f7; color: var(--text-muted); font-size: 13px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.modal-x:hover { background: #dce1ed; }
+.modal-stage-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--accent); opacity: 0.8; margin-bottom: 6px;
+}
+.modal-title { font-family: 'Open Sans', sans-serif; font-size: 18px; font-weight: 800; color: var(--primary); margin: 6px 0 4px; line-height: 1.25; }
+.modal-section { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); margin-bottom: 5px; margin-top: 16px; }
+.modal-txt { font-size: 13px; color: #4a5565; line-height: 1.75; }
+.modal-pain { font-size: 13px; color: #7a3a08; background: var(--warn-light); padding: 11px 13px; border-radius: 6px; border-left: 3px solid var(--warn); line-height: 1.65; }
+.modal-opp { font-size: 13px; color: #2a6e3f; background: #eef7f0; padding: 11px 13px; border-radius: 6px; border-left: 3px solid var(--accent-cta); line-height: 1.65; }
+.modal-evidence { font-size: 12px; color: var(--text-muted); line-height: 1.6; padding: 10px 12px; background: #f7f9fc; border-radius: 6px; border: 1px solid var(--border); }
+.modal-customer { font-size: 13px; color: #3a5068; background: #f0f6fc; padding: 11px 13px; border-radius: 6px; border-left: 3px solid var(--accent); line-height: 1.65; }
+
+/* --- SKIP LINK (WCAG 2.4.1) --- */
+.skip-link {
+  position: absolute;
+  top: -100px; left: 16px;
+  background: var(--primary); color: var(--accent-cta);
+  font-weight: 700; font-size: 13px;
+  padding: 8px 16px; border-radius: 0 0 6px 6px;
+  z-index: 9999; text-decoration: none;
+  border: 2px solid var(--accent-cta);
+  transition: top 0.15s;
+}
+.skip-link:focus { top: 0; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+h1.hdr-title { font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 700; color: #fff; line-height: 1.25; margin: 0; }
+h2.phase-name { font-family: 'Open Sans', sans-serif; font-size: 13px; font-weight: 800; color: #fff; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0; }
+h2.modal-title { font-family: 'Open Sans', sans-serif; font-size: 18px; font-weight: 800; color: var(--primary); margin: 6px 0 4px; line-height: 1.25; }
+:focus-visible { outline: 3px solid var(--accent-cta); outline-offset: 2px; }
+.phase-hdr :focus-visible, .hdr :focus-visible { outline-color: var(--accent-cta); }
+.card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; box-shadow: 0 0 0 5px rgba(107,170,223,0.25), 0 5px 18px rgba(13,59,98,0.14); transform: translateY(-2px); }
+.pchip:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; border-color: var(--primary); }
+.pain-badge:focus-visible { clip-path: none; border-radius: 4px; outline: 3px solid var(--primary); outline-offset: 3px; }
+.stkchip:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.stkchip:focus-visible .stk-tip { opacity: 1; }
+.modal-x:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<script>
+/* ================================================================
+   DATA - PRA Group Legal Recovery Service Blueprint
+================================================================ */
+
+const PERSONAS = [
+  { id:"attorneys",      initials:"AT", name:"Internal Attorneys",    role:"70–75 staff",             color:"#1a5276", count:"70–75",  desc:"Perform AMR/OALD reviews, manage filings and hearings, and select enforcement methods. Process ~180K accounts/month at recent peak capacity." },
+  { id:"usclerks",       initials:"UC", name:"US Clerks",             role:"~75 staff",               color:"#1a7a5c", count:"~75",    desc:"Handle document preparation, case movement, filing package creation, and court correspondence. Primary operators for paper-venue workflows." },
+  { id:"indiaclerks",    initials:"IC", name:"India Clerks",          role:"~220 staff",              color:"#8b6914", count:"~220",   desc:"Manage document coding/indexing, data entry, court mail processing, vendor invoice reconciliation, and follow-up tasks at scale." },
+  { id:"itprovana",      initials:"IT", name:"IT / Provana",          role:"~60 staff",               color:"#6c3483", count:"~60",    desc:"Workflow programming, template management, UAT/QA, and break-fix across QLaw, PRANet, and integration layers. Manage ~2,100 scheduled jobs." },
+  { id:"extlawfirms",    initials:"EL", name:"Ext. Law Firms",        role:"12 firms",                color:"#922b21", count:"12",     desc:"Overflow market coverage where PRA lacks internal scale. Data exchange via standard formats for contested cases and specialized jurisdictions." },
+  { id:"processservers", initials:"PS", name:"Process Servers",       role:"Sheriffs & Servers",      color:"#b9770e", count:"-",      desc:"Execute service of process, file returns, and navigate local court preferences. Sheriffs and private servers with jurisdiction-specific rules." },
+  { id:"courts",         initials:"CT", name:"Courts / e-File",       role:"Tyler & paper venues",    color:"#2c3e50", count:"-",      desc:"Tyler e-filing portals and paper-only venues. Filing standards vary at state, county, court, and judge level - including Florida's 93 counties." },
+  { id:"dataproviders",  initials:"DP", name:"Data Providers",        role:"Address, employer, bank", color:"#5b7fa4", count:"-",      desc:"Supply address, employer, bank, and property data hits. Credit bureaus support reporting accuracy and FCRA compliance." },
+];
+
+const STAKEHOLDERS = [
+  {
+    laneId: "lane-front",
+    group: "Frontstage",
+    items: [
+      { label:"Internal Attorneys", color:"#1a5276", tip:"AMR review, suit filings, hearings, and enforcement selections. 70–75 attorneys processing ~180K accounts/month at recent peak." },
+      { label:"IT / Provana",       color:"#6c3483", tip:"Workflow programming, templates, UAT/QA, break-fix. ~60 staff managing QLaw, PRANet, and integrations." },
+      { label:"Ext. Law Firms",     color:"#922b21", tip:"12 overflow firms handling markets where PRA lacks internal scale. Data exchange via standard formats." },
+    ]
+  },
+  {
+    laneId: "lane-back",
+    group: "Backstage",
+    items: [
+      { label:"India Clerks",       color:"#8b6914", tip:"~220 staff handling doc coding/indexing, data entry, court mail processing, and follow-ups." },
+      { label:"US Clerks",          color:"#1a7a5c", tip:"~75 staff managing doc prep, case movement, package creation, and filing coordination." },
+    ]
+  },
+  {
+    laneId: "lane-support",
+    group: "Support & Compliance",
+    items: [
+      { label:"Process Servers",    color:"#b9770e", tip:"Service of process, returns, and local court preferences. Sheriffs and private servers." },
+      { label:"Courts / e-File",    color:"#2c3e50", tip:"Tyler e-filing portals and paper-only venues. Filing standards vary by state, county, and judge." },
+      { label:"Data Providers",     color:"#5b7fa4", tip:"Address, employer, bank, and property hits. Credit bureaus for reporting." },
+    ]
+  },
+];
+
+const LANES = [
+  { id:"lane-front",   label:"Frontstage",          cls:"front-lane", conn:false },
+  { id:"c1",           label:"Line of Visibility",  cls:"conn-row",   conn:true, h:38 },
+  { id:"lane-back",    label:"Backstage",           cls:"back-lane",  conn:false },
+  { id:"c2",           label:"Line of Internal Interaction", cls:"conn-row", conn:true, h:38 },
+  { id:"lane-support", label:"Support & Compliance", cls:"supp-lane", conn:false },
+];
+
+const STAGES = [
+  /* ----------------------------------------------------
+     STAGE 1 - PRE-LEGAL
+  ---------------------------------------------------- */
+  {
+    id:"s1", number:"Step 01", name:"Account Onboarding", sublabel:"Pre-Legal", phase:"Phase 1: Pre-Legal",
+    evidence:"Issuer data file; charge-off statement; OC agreements/statements; bankruptcy & hardship flags",
+    customerJourney:"Account purchased from original creditor. Consumer is typically unaware of the transfer and may be contacted via call, digital outreach, or letters during the pre-legal phase.",
+    opportunity:"Up-front data/doc validation to prevent bad dates and field overwrites from propagating downstream.",
+    regulations:"FDCPA; state collection laws; SOL assessment",
+    lanes:{
+      "lane-front":[
+        {
+          id:"it-s1", personaId:"itprovana",
+          title:"Data Intake & System Onboarding",
+          quote:"Everything from issuers comes in as FTP or SFTP file drops - there are no APIs. When a file is malformed or out of sync, PRANet and QLaw drift apart until the next batch run catches up.",
+          detail:"PRANet performs initial account creation and batch handoffs are configured per issuer. The technology layer ingests issuer data files, normalizes field mappings, and pushes records into QLaw and OnBase for downstream processing. Without real-time APIs, synchronization depends entirely on scheduled batch cycles.",
+          painPoint:"No APIs in intake - all transfers are FTP/SFTP file drops. Batch lag leaves PRANet and QLaw out of sync between runs.",
+          conns:[]
+        }
+      ],
+      "lane-back":[
+        {
+          id:"ic-s1", personaId:"indiaclerks",
+          title:"Data Validation & Anomaly Correction",
+          quote:"Every incoming file gets validated by hand. When issuers send us dates from 1900 or fields that have been repurposed for something they were never meant to hold, we're the ones fixing it before anyone else touches the account.",
+          detail:"India clerks validate intake data, normalize fields, flag anomalies, and load corrected records to QLaw and OnBase. Missing issuer documents trigger follow-up requests that can delay account readiness for legal review.",
+          painPoint:"Data defects (1900 dates, repurposed fields) require manual correction at intake. Missing issuer docs trigger follow-up loops that delay the entire pipeline.",
+          conns:[]
+        }
+      ],
+      "lane-support":[
+        {
+          id:"sp-s1", personaId:"dataproviders",
+          title:"Issuer Handoff & Compliance Screening",
+          quote:"We rely on issuers, original creditors, and data validation vendors to deliver clean files over FTP infrastructure. If the upstream data is bad, every downstream process inherits the problem.",
+          detail:"Support processes at this stage involve issuers/OCs and data validation vendors feeding the intake pipeline. Regulatory requirements include FDCPA compliance, state collection law adherence, and statute of limitations assessment before any account enters the legal lifecycle.",
+          painPoint:"Issuers deliver data exclusively via FTP/SFTP with no validation layer. Incomplete or misidentified documents propagate downstream unchecked until a human catches them at case validation.",
+          conns:[]
+        }
+      ]
+    }
+  },
+  {
+    id:"s2", number:"Step 02", name:"Case Validation", sublabel:"Pre-Legal", phase:"Phase 1: Pre-Legal",
+    evidence:"Docs ingested to OnBase; doc prep/ID; pre-review checklists",
+    customerJourney:"No direct customer contact during this internal validation phase.",
+    opportunity:"Auto-ingest and classify documents with defect detection before AMR to reduce manual triage.",
+    regulations:"Documentation sufficiency; affidavit rules",
+    lanes:{
+      "lane-front":[
+        {
+          id:"cl-s2", personaId:"usclerks",
+          title:"Document Prep & Defect Routing",
+          quote:"We complete missing data, run pre-review checklists, and route defects to attorneys when something doesn't pass. But the routing is all manual triage - there's no auto-escalation, so things sit until someone picks them up.",
+          detail:"India and US clerks collaborate on document preparation and identification. Pre-review checklists are completed and defects are routed to attorneys as needed. This stage ensures documentation sufficiency before accounts advance to attorney meaningful review.",
+          painPoint:"Defect routing relies on manual triage with no auto-escalation path to attorneys. Cases can sit in queue until someone manually picks them up.",
+          conns:[]
+        },
+        {
+          id:"it-s2", personaId:"itprovana",
+          title:"QLaw Queues & SLA Tracking",
+          quote:"QLaw work queues drive case validation, but every record load takes 10 to 30 seconds because of the tight coupling between QLaw and OnBase. There's no decoupled document layer - it's all one monolith.",
+          detail:"QLaw manages work queues and SLA timers while OnBase handles document storage. The AMR presentation layer and automated doc requests operate on a 30-day SLA. The tight coupling between these systems creates significant latency during case validation.",
+          painPoint:"Record-load latency of ~10–30 seconds caused by QLaw–OnBase tight coupling. No decoupled document layer exists.",
+          conns:[]
+        }
+      ],
+      "lane-back":[
+        {
+          id:"ic-s2", personaId:"indiaclerks",
+          title:"Document Indexing & Exception Routing",
+          quote:"Doc indexing is entirely manual - we review, classify, correct, and route exceptions one at a time. There's no automated classification or triage. Every defect gets handled the same way regardless of severity.",
+          detail:"Clerks pre-review documents, index and correct metadata, route exceptions, and maintain checklists. The lack of automated document classification means every item requires human review, creating a throughput bottleneck at scale.",
+          painPoint:"Doc indexing and defect routing are fully manual - no automated classification or triage exists at the case validation stage.",
+          conns:[]
+        }
+      ],
+      "lane-support":[
+        {
+          id:"sp-s2", personaId:"courts",
+          title:"Compliance & Audit Oversight",
+          quote:"Documentation sufficiency and affidavit rules must be verified at this stage. If docs aren't properly indexed and validated here, they'll fail at AMR or get rejected by the court downstream.",
+          detail:"Clerks (India and US), compliance, and audit teams provide oversight during case validation. Regulatory requirements focus on documentation sufficiency and affidavit rule compliance.",
+          painPoint:"Compliance and audit oversight of documentation sufficiency is entirely manual with no automated completeness scoring or defect detection before AMR.",
+          conns:[]
+        }
+      ]
+    }
+  },
+
+  /* ----------------------------------------------------
+     STAGE 2 - LITIGATION
+  ---------------------------------------------------- */
+  {
+    id:"s3", number:"Step 03", name:"Legal Recovery (AMR)", sublabel:"Litigation", phase:"Phase 2: Litigation",
+    evidence:"AMR checklist; underlying issuer docs; account data views (PRA Net & QLaw)",
+    customerJourney:"AMR is an internal process. Consumer contact occurs only if specifically required during review.",
+    opportunity:"Consolidated AMR screen with 'check-all' functionality and a venue selector with embedded court rules.",
+    regulations:"AMR requirement (attorney meaningful review) mandated by state law",
+    lanes:{
+      "lane-front":[
+        {
+          id:"at-s3", personaId:"attorneys",
+          title:"Attorney Meaningful Review",
+          badge:"AMR GATE",
+          quote:"I'm running 20-plus individual checks per account with no 'check-all' option, and every screen load takes 10 to 30 seconds. I'm toggling between PRA Net and QLaw on dual screens because there's no consolidated view.",
+          detail:"Internal attorneys perform Attorney Meaningful Review - a state-mandated legal review consisting of 20+ checks per account. They approve or reject accounts for legal action based on documentation quality, compliance status, and account viability. The review occurs across dual screens (PRA Net and QLaw) with fully manual audit trail entry.",
+          painPoint:"20+ individual clicks per account with no check-all option. 10–30 second load times between screens block throughput. Dual-screen workflow is a workaround for the lack of a consolidated AMR view.",
+          conns:[]
+        },
+        {
+          id:"it-s3", personaId:"itprovana",
+          title:"AMR Platform & Audit Trail",
+          quote:"The dual-screen setup is a workaround we built because there's no consolidated AMR view in QLaw. The audit trail is 100% manual entry - if an attorney forgets a step, there's no system catch.",
+          detail:"Technology supports AMR through dual-screen review across PRA Net and QLaw, with D-DAS rules engine and Power BI dashboards. The audit trail is fully dependent on manual entry with no automated validation or completeness checks.",
+          painPoint:"Dual-screen is a workaround for lack of consolidated AMR view. Audit trail is fully manual-entry dependent with no automated completeness checks.",
+          conns:[]
+        }
+      ],
+      "lane-back":[
+        {
+          id:"ic-s3", personaId:"indiaclerks",
+          title:"Evidence Preparation & Reject Handling",
+          quote:"When an attorney rejects an account at AMR, the evidence prep to fix and resubmit falls on us. There's no auto-requeue or triage priority - we just absorb the rework and process it in the order it landed.",
+          detail:"India and US clerks prepare evidence sets and respond to AMR rejections. Rejected accounts require manual evidence re-assembly with no automated re-queuing or prioritization system. All rework is absorbed by the clerk team.",
+          painPoint:"Evidence prep for AMR rejects is fully manual - no auto re-queue, no triage priority. Clerks absorb all rework without system support.",
+          conns:[]
+        }
+      ],
+      "lane-support":[
+        {
+          id:"sp-s3", personaId:"courts",
+          title:"QA/Audit & AMR Compliance",
+          quote:"AMR is a state-mandated requirement - attorneys must perform meaningful review at required legal stages. Internal QA and audit teams validate that the process is followed correctly.",
+          detail:"Internal attorneys and QA/audit teams provide compliance oversight. The AMR requirement is mandated by state law and must occur at required legal stages with proper documentation.",
+          painPoint:"QA validation of AMR completeness relies on manual spot-checks. No system-enforced audit trail ensures every required check was actually performed.",
+          conns:[]
+        }
+      ]
+    }
+  },
+  {
+    id:"s4", number:"Step 04", name:"Suit Filing", sublabel:"Litigation", phase:"Phase 2: Litigation",
+    evidence:"Filing package (summons, complaint, affidavits) + venue-specific forms; checks (MICR) where required",
+    customerJourney:"Consumer is named as defendant - suit has been formally initiated.",
+    opportunity:"Decouple templates from workflow. Enable batch formatting updates with preview and regression isolation.",
+    regulations:"Court formatting/order; filing deadlines; venue rules",
+    lanes:{
+      "lane-front":[
+        {
+          id:"at-s4", personaId:"attorneys",
+          title:"Filing Package Review & Venue Confirmation",
+          quote:"I do the final review of every filing package - confirm the correct venue, sign digitally or wet depending on the jurisdiction. A wrong venue selection drives 15 to 20 percent rework because court rules are pixel-perfect. Zero tolerance.",
+          detail:"Internal attorneys perform final review of the complete filing package, confirm correct venue assignment, and sign documents (digital or wet signature per venue requirements). Venue selection errors cascade into full rework cycles due to strict court formatting requirements.",
+          painPoint:"Wrong venue selection drives 15–20% rework. Court rules are pixel-perfect with zero error tolerance - a single formatting mistake means full resubmission.",
+          conns:[]
+        },
+        {
+          id:"it-s4", personaId:"itprovana",
+          title:"Template Merge & E-Filing Infrastructure",
+          quote:"Templates are embedded in the workflow - a one-inch margin change took us four weeks and triggered a full regression cycle. Every template update ripples through the entire system because nothing is decoupled.",
+          detail:"Document merge operates from Word templates with e-filing via Tyler or FTP/email for paper venues. MICR check printing handles payment processing. Because templates are embedded directly in the workflow engine, any formatting change requires full QA/UAT cycles.",
+          painPoint:"Templates embedded in workflow - a 1-inch margin change took 4 weeks. Every change triggers full regression testing because nothing is decoupled.",
+          conns:[]
+        }
+      ],
+      "lane-back":[
+        {
+          id:"uc-s4", personaId:"usclerks",
+          title:"Package Compilation & Mailing",
+          quote:"For paper-only venues, we're physically compiling packages, attaching MICR checks, and mailing them out. There's no mailing confirmation - we send it and hope it arrives.",
+          detail:"US clerks compile complete filing packages, attach checks where required, and handle mailing for paper-only venues. The lack of positive mailing confirmation means failures are discovered only when court deadlines pass without acknowledgment.",
+          painPoint:"Manual package compilation and physical check attachment for paper-only venues. No mailing confirmation - failures discovered late.",
+          conns:[]
+        }
+      ],
+      "lane-support":[
+        {
+          id:"sp-s4", personaId:"courts",
+          title:"Courts & Filing Standards",
+          quote:"Every court has its own formatting rules, filing order, and deadline structure. Tyler e-filing covers some venues, but paper-only courts add an entirely separate manual workflow.",
+          detail:"Courts, e-file portals, and process servers govern filing standards. Regulations include court-specific formatting and ordering requirements, filing deadlines, and venue-specific rules that vary at the state, county, court, and even judge level.",
+          painPoint:"Venue rules cascade across four levels (state, county, court, judge) with no centralized rules repository. Tyler e-filing behavior varies across 93 counties in Florida alone.",
+          conns:[]
+        }
+      ]
+    }
+  },
+  {
+    id:"s5", number:"Step 05", name:"Post Suit Filing", sublabel:"Litigation", phase:"Phase 2: Litigation",
+    evidence:"Court submission receipts/acknowledgments; e-file portal confirmations or mail proofs",
+    customerJourney:"Consumer is awaiting court acceptance and acknowledgment of the filed suit.",
+    opportunity:"E-file coverage expansion with a centralized submission status hub.",
+    regulations:"Local e-file/paper standards; service of process prerequisites",
+    lanes:{
+      "lane-front":[
+        {
+          id:"at-s5", personaId:"attorneys",
+          title:"Rejection Handling & Resubmission",
+          quote:"When a court rejects a filing, there's no partial correction path - we have to go through the full resubmit cycle from scratch. One small error means starting the entire package over.",
+          detail:"Internal attorneys handle court rejections and edits, managing filings across e-file and paper venues. Court rejections require a complete resubmission cycle with no ability to correct individual components of a filing package.",
+          painPoint:"Court rejections require full resubmit cycle - no partial correction path available. Every rejection restarts the entire process.",
+          conns:[]
+        },
+        {
+          id:"it-s5", personaId:"itprovana",
+          title:"Submission Tracking",
+          quote:"E-file acknowledgment tracking is manual - there's no structured submission status hub or alert system. We're checking portals one at a time to see what's been accepted or rejected.",
+          detail:"Technology supports submission tracking through e-file acknowledgments and receipt monitoring. However, there is no centralized status hub - tracking requires manual checks across multiple portal systems.",
+          painPoint:"E-file acknowledgment tracking is manual with no structured submission status hub or alert system.",
+          conns:[]
+        }
+      ],
+      "lane-back":[
+        {
+          id:"uc-s5", personaId:"usclerks",
+          title:"Court Acceptance Monitoring",
+          quote:"We monitor court acceptances, remediate rejects, and resubmit - but paper mailbacks have no positive delivery confirmation. We only find out something failed when a deadline slips without acknowledgment.",
+          detail:"US clerks monitor court acceptances, remediate rejections, and manage resubmissions across both e-file and paper channels. Paper venue mailbacks lack any positive delivery confirmation mechanism.",
+          painPoint:"Paper mailbacks have no positive delivery confirmation - failures discovered late with no early-warning signal.",
+          conns:[]
+        }
+      ],
+      "lane-support":[
+        {
+          id:"sp-s5", personaId:"courts",
+          title:"Courts, Postal & Template Admin",
+          quote:"Local e-file and paper standards vary widely. Service of process prerequisites must be met before the case can proceed.",
+          detail:"Courts, postal/courier services, and template administrators support this phase. Regulations cover local e-file and paper standards along with service of process prerequisites.",
+          painPoint:"No positive delivery confirmation for paper filings. Template admin changes require full QA/UAT cycles, creating multi-week delays for even minor formatting corrections.",
+          conns:[]
+        }
+      ]
+    }
+  },
+  {
+    id:"s6", number:"Step 06", name:"Service Result", sublabel:"Litigation", phase:"Phase 2: Litigation",
+    evidence:"Service affidavits/returns; process server/sheriff status; case number & hearing date",
+    customerJourney:"Summons is served (or non-served). Consumer may answer, contest, or default.",
+    opportunity:"Service tracking hub combining RPA and manual logs with SLA alerts for proactive monitoring.",
+    regulations:"Service rules (personal/substitute/posting); due diligence requirements",
+    lanes:{
+      "lane-front":[
+        {
+          id:"at-s6", personaId:"attorneys",
+          title:"Service Outcome Review",
+          quote:"There's no real-time service status - I have to manually follow up with process servers and sheriffs to find out whether service happened, and then decide whether to re-serve or pursue alternate service.",
+          detail:"Internal attorneys review service outcomes and determine next steps: re-serve, alternate service methods, or proceeding to default. The lack of real-time status visibility means attorneys must manually track and follow up on every service attempt.",
+          painPoint:"No real-time service status - attorneys must manually follow up to determine whether re-serve is needed.",
+          conns:[]
+        },
+        {
+          id:"it-s6", personaId:"itprovana",
+          title:"Service Status Ingestion & RPA",
+          quote:"We use RPA scripts to check court and sheriff websites for service status, but those scripts are brittle. When a site changes its layout, the automation silently breaks and nobody knows until someone manually checks.",
+          detail:"Service status is ingested from process server and sheriff platforms via RPA checks. The automation layer monitors external sites for status updates, but any changes to those sites can break the scripts without warning.",
+          painPoint:"RPA scripts are brittle - court/sheriff site changes silently break automation without warning. No fallback detection.",
+          conns:[]
+        }
+      ],
+      "lane-back":[
+        {
+          id:"ic-s6", personaId:"indiaclerks",
+          title:"Service Tracking & Re-Serve Management",
+          quote:"We track every service attempt and manage re-serve orders manually. When you have multiple attempts per account, the follow-up burden compounds fast - and there's no system helping us prioritize.",
+          detail:"India and US clerks track service attempts and manage re-serve orders. Multiple attempts per account create compounding follow-up work, all tracked through manual logging without system-driven prioritization or SLA enforcement.",
+          painPoint:"Manual sheriff tracking and re-serve logging. Multiple attempts per account create compounding follow-up burden with no prioritization system.",
+          conns:[]
+        }
+      ],
+      "lane-support":[
+        {
+          id:"sp-s6", personaId:"processservers",
+          title:"Process Servers & Skip/Asset Vendors",
+          quote:"Service rules vary by jurisdiction - personal, substitute, and posting methods all have different legal requirements and due diligence standards.",
+          detail:"Process servers, sheriffs, and skip/asset vendors support service execution. Regulations govern service methods (personal, substitute, posting) and due diligence requirements.",
+          painPoint:"Sheriff capacity and turnaround times are entirely outside PRA control. Service rule variations across jurisdictions create inconsistent outcomes with no standardized SLA enforcement.",
+          conns:[]
+        }
+      ]
+    }
+  },
+  {
+    id:"s7", number:"Step 07", name:"Post Suit (Pre-Judgment)", sublabel:"Litigation", phase:"Phase 2: Litigation",
+    evidence:"Contested filings, discovery materials, hearing notices",
+    customerJourney:"If contested, appearances and discovery commence. If uncontested, case proceeds toward default judgment.",
+    opportunity:"Contested subflow playbooks with scoped kill-switches to halt specific process streams safely.",
+    regulations:"Civil procedure for answers/discovery/hearings",
+    lanes:{
+      "lane-front":[
+        {
+          id:"at-s7", personaId:"attorneys",
+          title:"Contested Case Handling",
+          quote:"When a case gets contested, it creates a sudden workload spike with no buffering or reallocation mechanism. We handle answers, counterclaims, hearings, and discovery - and the volume is completely unpredictable.",
+          detail:"Internal attorneys and external law firms handle contested matters including answers, counterclaims, hearings, and discovery processes. Contested cases create sudden and unpredictable workload spikes that the current system cannot buffer or redistribute.",
+          painPoint:"Contested cases create sudden workload spikes with no buffering or reallocation mechanism.",
+          conns:[]
+        },
+        {
+          id:"it-s7", personaId:"itprovana",
+          title:"Contested Subflow Tracking",
+          quote:"Contested subflow changes cascade into full regression cycles because of spider-web rule dependencies. You change one rule and it ripples across everything - there's no way to scope the impact.",
+          detail:"Technology tracks contested subflows and hearing calendars within QLaw. The tightly coupled rule dependencies mean any change to contested case handling triggers full regression testing across the entire workflow system.",
+          painPoint:"Contested subflow changes cascade into full regression cycles due to spider-web rule dependencies. No scoped impact isolation.",
+          conns:[]
+        }
+      ],
+      "lane-back":[
+        {
+          id:"uc-s7", personaId:"usclerks",
+          title:"Discovery Coordination & Calendar Management",
+          quote:"Discovery mailing coordination is completely manual, and calendar management has no system-of-record integration. We're juggling hearing dates, deadlines, and mailing confirmations across separate tools.",
+          detail:"US clerks coordinate discovery mailings and manage hearing calendars. Both processes are manual with no system-of-record integration, requiring clerks to track deadlines and correspondence across disconnected tools.",
+          painPoint:"Discovery mailing coordination fully manual. Calendar management has no system-of-record integration.",
+          conns:[]
+        }
+      ],
+      "lane-support":[
+        {
+          id:"sp-s7", personaId:"extlawfirms",
+          title:"External Counsel & Discovery Vendors",
+          quote:"External counsel handles overflow contested matters. Discovery vendors support document production when volume exceeds internal capacity.",
+          detail:"External counsel (for overflow) and discovery vendors support this phase. Civil procedure rules for answers, discovery, and hearings govern all activity.",
+          painPoint:"Coordination with 12 external firms relies on standard-format file exchange with no real-time case visibility or shared workflow. Overflow allocation is manual.",
+          conns:[]
+        }
+      ]
+    }
+  },
+  {
+    id:"s8", number:"Step 08", name:"Judgement", sublabel:"Litigation", phase:"Phase 2: Litigation",
+    evidence:"Judgment orders, interest entries, costs taxed",
+    customerJourney:"Judgment is entered - either by default (uncontested) or following a contested hearing.",
+    opportunity:"Post-judgment interest calculators and automated judgment packet generators.",
+    regulations:"Judgment standards; interest/costs calculation; notice requirements",
+    lanes:{
+      "lane-front":[
+        {
+          id:"at-s8", personaId:"attorneys",
+          title:"Judgment Motions & Hearings",
+          quote:"Post-judgment interest isn't system-calculated - I have to source and supply the figures externally. It's one more manual step in a process that should be automated by now.",
+          detail:"Internal attorneys present at hearings, submit judgment motions and orders, and calculate post-judgment interest externally. The lack of system-calculated interest figures adds manual burden to every judgment entry.",
+          painPoint:"Post-judgment interest not system-calculated - attorneys must source and supply figures externally for every judgment.",
+          conns:[]
+        },
+        {
+          id:"it-s8", personaId:"itprovana",
+          title:"Judgment Entry & QLaw Sync",
+          quote:"Any change to the judgment workflow risks regression across all connected rules. Interest calculation requires external input to QLaw because the system can't compute it natively.",
+          detail:"Judgment entry and cost recording flow through QLaw with manual court CMS integration. Interest calculations require external input because QLaw lacks native computation capabilities. PRA-to-QLaw synchronization remains batch-dependent.",
+          painPoint:"Any change risks regression across all connected rules. Interest calculation requires external input to QLaw - no native computation.",
+          conns:[]
+        }
+      ],
+      "lane-back":[
+        {
+          id:"ic-s8", personaId:"indiaclerks",
+          title:"Judgment Packet Assembly & Court Mail",
+          quote:"Court mail gets scanned and manually keyed every single day. There's an OCR solution in development, but no confirmed go-live date. Until then, it's all human eyes and keystrokes.",
+          detail:"India and US clerks assemble judgment packets, file motions and orders, and record outcomes. Court mail is processed through daily manual scanning and data entry - an OCR solution is in development but has no confirmed deployment date.",
+          painPoint:"Court mail scanned and keyed manually every day. OCR solution in development but no live date confirmed.",
+          conns:[]
+        }
+      ],
+      "lane-support":[
+        {
+          id:"sp-s8", personaId:"courts",
+          title:"Court Clerks & Compliance",
+          quote:"Judgment standards, interest and cost calculations, and notice requirements all vary by jurisdiction. Court clerks and judges control the final entry.",
+          detail:"Court clerks, judges, and compliance teams support judgment activities. Regulations govern judgment standards, interest/costs calculation methods, and notice requirements.",
+          painPoint:"Interest and cost calculation standards vary by jurisdiction with no system support. Court-controlled timelines introduce unpredictable delays with no proactive status visibility.",
+          conns:[]
+        }
+      ]
+    }
+  },
+
+  /* ----------------------------------------------------
+     STAGE 3 - POST-JUDGMENT
+  ---------------------------------------------------- */
+  {
+    id:"s9", number:"Step 09", name:"Post-Judgment Actions", sublabel:"Post-Judgment Enforcement", phase:"Phase 3: Post-Judgment Enforcement",
+    evidence:"Garnishment/levy/lien orders; employer/bank responses; satisfaction/renewal filings",
+    customerJourney:"Wage garnishment, bank levy, or lien is executed. Consumer may pay directly, enter a stipulation, or satisfy the judgment.",
+    opportunity:"Asset waterfall configurator with employer/bank integration options and auto-satisfaction/renewal prompts.",
+    regulations:"CCPA wage caps; state garnishment/levy/lien statutes; FCRA accuracy; renewal/satisfaction rules",
+    lanes:{
+      "lane-front":[
+        {
+          id:"at-s9", personaId:"attorneys",
+          title:"Enforcement Selection & Filing",
+          quote:"Enforcement selections - wage garnishment, bank levy, lien - all require manual configuration. There's no system-driven asset waterfall logic to tell me which method is optimal for a given account.",
+          detail:"Internal attorneys select enforcement methods (wage garnishment, bank levy, property lien), sign and file orders, and manage defaults and stipulations. Each enforcement type requires separate manual configuration with no system-driven optimization or asset waterfall logic.",
+          painPoint:"Enforcement selections (wage/bank/lien) require manual config. No system-driven asset waterfall logic to optimize recovery method.",
+          conns:[]
+        },
+        {
+          id:"it-s9", personaId:"itprovana",
+          title:"Garnishment Coordination & Sinacs",
+          quote:"There are no employer APIs - garnishment coordination is done by mail. Post-judgment configuration requires a full dev cycle for every change. Sinacs e-signature updates go through the QLaw vendor with no direct API control.",
+          detail:"Technology supports garnishment, levy, and lien coordination through QLaw with Sinacs for e-signatures. Employer and bank interfaces are manual or mail-based. Credit bureau reporting and payment processing complete the enforcement technology stack.",
+          painPoint:"No employer APIs - garnishment coordination done by mail. Post-judgment config requires full dev cycle. Sinacs updates require vendor coordination.",
+          conns:[]
+        }
+      ],
+      "lane-back":[
+        {
+          id:"ic-s9", personaId:"indiaclerks",
+          title:"Enforcement Filing & Vendor Reconciliation",
+          quote:"We file and serve garnishments, levies, and liens, then monitor employer and bank compliance. The vendor invoice reconciliation alone is over $500K per week, done at the account level manually - that's 100K-plus transactions a month with no auto-matching.",
+          detail:"India and US clerks file and serve enforcement orders, monitor employer/bank compliance, and reconcile vendor invoices. The reconciliation workload exceeds $500K per week across 100K+ monthly transactions, all processed at the individual account level without automated matching.",
+          painPoint:"Vendor invoice reconciliation ($500K+/week) done at account level manually. 100K+ monthly transactions with no auto-matching.",
+          conns:[]
+        }
+      ],
+      "lane-support":[
+        {
+          id:"sp-s9", personaId:"dataproviders",
+          title:"Employers, Banks & Payment Processors",
+          quote:"Employers, banks, credit bureaus, and payment processors all play a role in enforcement. Each has its own response timelines and compliance requirements.",
+          detail:"Employers, banks, credit bureaus, and payment processors support post-judgment enforcement. Regulations include CCPA wage caps, state garnishment/levy/lien statutes, FCRA accuracy requirements, and renewal/satisfaction rules.",
+          painPoint:"No employer or bank APIs exist. All garnishment coordination is done by mail, creating lag in a process that handles 100K+ monthly transactions and $500K+/week in vendor invoices.",
+          conns:[]
+        }
+      ]
+    }
+  }
+];
+
+const STAGE_DEPS_RISKS = {
+  s1: {
+    dependencies: [
+      "Stable bi-directional batch data syncs between PRANet ↔ QLaw required to keep AMR decisions, payments, and flags aligned",
+      "Document integrity and naming at ingest/OnBase must be reliable to avoid AMR and court rejections"
+    ],
+    risks: [
+      "If issuer documents remain incomplete/misidentified, AMR and court rejections will sustain high rework",
+      "Batch sync failures or lags between PRANet and QLaw can create mismatches in balances, flags, and actions"
+    ]
+  },
+  s2: {
+    dependencies: [
+      "Document integrity and naming at ingest/OnBase must be reliable to avoid AMR and court rejections",
+      "BPO throughput (indexing, court mail, follow-ups, reconciliation) drives pre-review and post-filing pace"
+    ],
+    risks: [
+      "If issuer documents remain incomplete/misidentified, AMR and court rejections will sustain high rework",
+      "If QLaw–OnBase coupling persists, record-load latency and 4-week template change cycles will continue to depress throughput"
+    ]
+  },
+  s3: {
+    dependencies: [
+      "Stable bi-directional batch data syncs between PRANet ↔ QLaw required to keep AMR decisions, payments, and flags aligned",
+      "Document integrity and naming at ingest/OnBase must be reliable to avoid AMR and court rejections"
+    ],
+    risks: [
+      "If issuer documents remain incomplete/misidentified, AMR and court rejections will sustain high rework",
+      "If QLaw–OnBase coupling persists, record-load latency and 4-week template change cycles will continue to depress throughput",
+      "Batch sync failures or lags between PRANet and QLaw can create mismatches in balances, flags, and actions"
+    ]
+  },
+  s4: {
+    dependencies: [
+      "QA/UAT/CAB governance gates changes because config and code are not fully decoupled",
+      "QLaw–OnBase tight coupling and job schedulers (~2,100 jobs) must run consistently to keep queues, merges, and packages flowing"
+    ],
+    risks: [
+      "If QLaw–OnBase coupling persists, record-load latency and 4-week template change cycles will continue to depress throughput",
+      "If venue configuration stays code-centric, every change ripples across the spider-web, prolonging regression and time-to-market"
+    ]
+  },
+  s5: {
+    dependencies: [
+      "Tyler e-filing portals, sheriff/process-server endpoints, and RPA scripts must stay in sync with external site changes",
+      "BPO throughput (indexing, court mail, follow-ups, reconciliation) drives pre-review and post-filing pace"
+    ],
+    risks: [
+      "Paper QC gaps (no positive 'printed/posted' confirmations) can lead to late discovery of filing failures"
+    ]
+  },
+  s6: {
+    dependencies: [
+      "Court calendars/local rules and sheriff capacity govern service-to-judgment timelines; PRA has limited influence",
+      "Tyler e-filing portals, sheriff/process-server endpoints, and RPA scripts must stay in sync with external site changes"
+    ],
+    risks: [
+      "RPA brittleness to court/sheriff site changes can cause status gaps and manual recovery work"
+    ]
+  },
+  s7: {
+    dependencies: [
+      "Court calendars/local rules and sheriff capacity govern service-to-judgment timelines; PRA has limited influence",
+      "QA/UAT/CAB governance gates changes because config and code are not fully decoupled",
+      "Operations needs event visibility/observability to safely use scoped kill-switches and restarts",
+      "External law firms (~12) remain the overflow/market coverage mechanism where PRA lacks scale"
+    ],
+    risks: [
+      "If venue configuration stays code-centric, every change ripples across the spider-web, prolonging regression and time-to-market"
+    ]
+  },
+  s8: {
+    dependencies: [
+      "Court calendars/local rules and sheriff capacity govern service-to-judgment timelines; PRA has limited influence",
+      "BPO throughput (indexing, court mail, follow-ups, reconciliation) drives post-filing pace"
+    ],
+    risks: [
+      "Batch sync failures or lags between PRANet and QLaw can create mismatches in balances, flags, and actions"
+    ]
+  },
+  s9: {
+    dependencies: [
+      "Sinacs e-signature updates require coordination through the QLaw vendor (no direct API control)",
+      "BPO throughput (indexing, court mail, follow-ups, reconciliation) drives reconciliation pace"
+    ],
+    risks: [
+      "Batch sync failures or lags between PRANet and QLaw can create mismatches in balances, flags, and actions"
+    ]
+  }
+};
+
+const CROSS_CUTTING = {
+  dependencies: [
+    "OnBase remains the system of record for all documents used in litigation and enforcement",
+    "QLaw remains on legacy FoxPro UI + SQL Server back end until modernization is executed",
+    "QLaw–OnBase tight coupling and job schedulers (~2,100 jobs) must run consistently",
+    "Power BI reporting depends on timely downstream batch loads from QLaw tables"
+  ],
+  risks: [
+    "Workforce scale (~220 India clerks, ~75 US clerks, ~70–75 attorneys, ~60 IT/Provana) is assumed unchanged - any reduction compounds existing throughput pressures"
+  ]
+};
+</script>
+
+<!-- MARKUP -->
+<header class="hdr" role="banner">
+  <div class="hdr-logo" aria-hidden="true">PRA <em>Group</em></div>
+  <div class="hdr-sep" aria-hidden="true"></div>
+  <div class="hdr-meta">
+    <div class="hdr-eye" aria-hidden="true">Service Blueprint · Current State</div>
+    <h1 class="hdr-title">Legal Recovery Journey</h1>
+    <p class="hdr-sub">End-to-end legal debt recovery across pre-legal, litigation, and post-judgment enforcement - mapping frontstage, backstage, and support processes.</p>
+  </div>
+  <div class="hdr-btns"></div>
+</header>
+
+<nav class="legend-bar" aria-label="Entity legend and map keys">
+  <div class="legend-label" id="entity-filter-label">Entities</div>
+  <div class="pchips" id="pchips" role="group" aria-labelledby="entity-filter-label"></div>
+  <div class="legend-sep" aria-hidden="true"></div>
+  <div class="legend-keys">
+    <div class="lkey"><span class="lkey-swatch" style="background:var(--warn)" aria-hidden="true"></span>Pain point</div>
+    <div class="lkey"><span class="lkey-swatch" style="background:var(--accent-cta)" aria-hidden="true"></span>Opportunity</div>
+  </div>
+</nav>
+
+<div class="filter-bar" id="filter-bar" role="region" aria-label="Entity filters">
+  <div class="filter-bar-label">Filter by</div>
+  <div class="fchips" id="fchips" role="group" aria-label="Entity filter toggles"></div>
+  <div class="filter-count" id="filter-count"></div>
+  <button class="filter-clear" id="filter-clear" aria-label="Clear all filters" style="display:none">Clear all</button>
+</div>
+
+<main id="main-content">
+<div class="canvas-wrap" id="canvas-wrap" role="region" aria-label="Service blueprint - scroll horizontally to view all 9 steps">
+  <div class="stk-col" id="stk-col" role="complementary" aria-label="Stakeholders panel">
+    <div class="stk-phase-spacer"></div>
+    <div class="stk-header"><div class="stk-header-txt">Stakeholders</div></div>
+  </div>
+  <div class="canvas-outer">
+    <div class="phase-group-row" id="phase-group-row"></div>
+    <div class="canvas-body" id="canvas-body">
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- Pain popover -->
+<div class="pain-pop" id="pain-pop" role="tooltip" aria-live="polite">
+  <div class="pain-pop-title" aria-hidden="true">⚠ Pain Point</div>
+  <div class="pain-pop-txt" id="pain-pop-txt"></div>
+</div>
+
+<!-- Dependencies & Risks popover -->
+<div class="dr-pop" id="dr-pop" role="dialog" aria-label="Dependencies and risks">
+  <div id="dr-pop-inner"></div>
+</div>
+
+<!-- Card modal -->
+<div class="modal-wrap" id="modal-wrap" role="dialog" aria-modal="true" aria-labelledby="modal-title-text" onclick="handleModalBg(event)">
+  <div class="modal" id="modal-dialog">
+    <button class="modal-x" onclick="closeModal()" aria-label="Close dialog">✕</button>
+    <div id="modal-inner"></div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   BUILD
+================================================================ */
+
+/* --- Entity legend chips - click opens entity detail modal --- */
+const pchipsEl = document.getElementById('pchips');
+
+/* Precompute stage presence per persona */
+const stagePresence = {};
+PERSONAS.forEach(p => { stagePresence[p.id] = new Set(); });
+STAGES.forEach(stage => {
+  Object.values(stage.lanes).forEach(cards => {
+    cards.forEach(cd => {
+      if (stagePresence[cd.personaId]) stagePresence[cd.personaId].add(stage.id);
+    });
+  });
+});
+
+PERSONAS.forEach(p => {
+  const c = document.createElement('button');
+  c.className = 'pchip';
+  c.dataset.pid = p.id;
+  c.setAttribute('aria-label', `View details for ${p.name}`);
+  c.innerHTML = `<div class="pavatar" style="background:${p.color}" aria-hidden="true">${p.initials}</div><div class="pinfo"><div class="pname">${p.name}</div><div class="prole">${p.role}</div></div>`;
+  c.addEventListener('click', () => openEntityModal(p));
+  pchipsEl.appendChild(c);
+});
+
+function openEntityModal(p) {
+  const presence = stagePresence[p.id] || new Set();
+  const pips = STAGES.map(s =>
+    `<span style="display:inline-block;padding:3px 8px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;white-space:nowrap;margin:2px 3px 2px 0;${presence.has(s.id) ? 'background:var(--accent-light);color:var(--primary)' : 'background:#f3f4f6;color:#c0c8d4'}">${s.name}</span>`
+  ).join('');
+
+  /* Collect pain points for this entity */
+  const pains = [];
+  STAGES.forEach(stage => {
+    Object.values(stage.lanes).forEach(cards => {
+      cards.forEach(cd => {
+        if (cd.personaId === p.id && cd.painPoint) {
+          pains.push({ stage: stage.name, pain: cd.painPoint });
+        }
+      });
+    });
+  });
+  const painHTML = pains.length
+    ? `<div class="modal-section">Key Pain Points</div>` + pains.map(pp =>
+        `<div class="modal-pain" style="margin-bottom:8px"><strong style="color:#7a3a08;font-size:10px;text-transform:uppercase;letter-spacing:1px">${pp.stage}</strong><br>${pp.pain}</div>`
+      ).join('')
+    : '';
+
+  document.getElementById('modal-inner').innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+      <div style="width:48px;height:48px;border-radius:50%;background:${p.color};display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700;flex-shrink:0">${p.initials}</div>
+      <div>
+        <h2 class="modal-title" id="modal-title-text" style="margin:0">${p.name}</h2>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:2px">${p.role}</div>
+      </div>
+    </div>
+    <div class="modal-section">Overview</div>
+    <p class="modal-txt">${p.desc || ''}</p>
+    <div class="modal-section">Active In Stages</div>
+    <div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:4px">${pips}</div>
+    ${painHTML}
+  `;
+
+  const wrap = document.getElementById('modal-wrap');
+  wrap.classList.add('open');
+  requestAnimationFrame(() => {
+    const closeBtn = document.querySelector('.modal-x');
+    if (closeBtn) closeBtn.focus();
+  });
+}
+
+/* --- Filter chips - toggle filtering --- */
+const activeFilters = new Set();
+const fchipsEl = document.getElementById('fchips');
+const filterCount = document.getElementById('filter-count');
+const filterClear = document.getElementById('filter-clear');
+
+PERSONAS.forEach(p => {
+  const btn = document.createElement('button');
+  btn.className = 'fchip';
+  btn.dataset.pid = p.id;
+  btn.setAttribute('aria-label', `Filter by ${p.name}`);
+  btn.setAttribute('aria-pressed', 'false');
+  btn.innerHTML = `<span class="fchip-dot" style="background:${p.color}" aria-hidden="true"></span>${p.name}`;
+  btn.addEventListener('click', () => toggleFilter(p.id));
+  fchipsEl.appendChild(btn);
+});
+
+function toggleFilter(pid) {
+  if (activeFilters.has(pid)) {
+    activeFilters.delete(pid);
+  } else {
+    activeFilters.add(pid);
+  }
+  applyFilters();
+}
+
+function clearAllFilters() {
+  activeFilters.clear();
+  applyFilters();
+}
+
+filterClear.addEventListener('click', clearAllFilters);
+
+function applyFilters() {
+  const hasFilters = activeFilters.size > 0;
+
+  /* Toggle clear button */
+  filterClear.style.display = hasFilters ? '' : 'none';
+
+  /* Update filter chip states */
+  document.querySelectorAll('.fchip').forEach(c => {
+    const pid = c.dataset.pid;
+    const isActive = activeFilters.has(pid);
+    const p = PERSONAS.find(x => x.id === pid);
+    c.classList.toggle('active', isActive);
+    c.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    if (isActive && p) {
+      c.style.background = p.color;
+      c.style.borderColor = p.color;
+      c.style.color = '#fff';
+    } else {
+      c.style.background = '';
+      c.style.borderColor = '';
+      c.style.color = '';
+    }
+  });
+
+  /* Update card visibility */
+  let shown = 0, total = 0;
+  document.querySelectorAll('.card').forEach(c => {
+    total++;
+    if (hasFilters && !activeFilters.has(c.dataset.pid)) {
+      c.classList.add('dimmed');
+    } else {
+      c.classList.remove('dimmed');
+      shown++;
+    }
+  });
+
+  /* Update count text */
+  filterCount.textContent = hasFilters ? `${shown} of ${total} cards` : '';
+}
+
+/* --- Canvas build --- */
+function build() {
+  const stkCol = document.getElementById('stk-col');
+  const body   = document.getElementById('canvas-body');
+
+  /* Stakeholders cells */
+  LANES.forEach(lane => {
+    const cell = document.createElement('div');
+    cell.dataset.laneId = lane.id;
+    if (lane.conn) {
+      cell.className = 'stk-cell conn-row';
+      cell.style.height = lane.h + 'px';
+    } else {
+      cell.className = 'stk-cell';
+      const stk = STAKEHOLDERS.find(s => s.laneId === lane.id);
+      if (stk) {
+        if (stk.group) {
+          const grp = document.createElement('div');
+          grp.className = 'stk-group-label';
+          grp.textContent = stk.group;
+          cell.appendChild(grp);
+        }
+        stk.items.forEach(item => {
+          const chip = document.createElement('div');
+          chip.className = 'stkchip';
+          chip.setAttribute('tabindex', '0');
+          chip.setAttribute('role', 'button');
+          const tipId = `tip-${item.label.replace(/\s/g,'-').toLowerCase()}`;
+          chip.setAttribute('aria-describedby', tipId);
+          chip.innerHTML = `<span class="stk-dot" style="background:${item.color}" aria-hidden="true"></span>${item.label}<span class="stk-tip" id="${tipId}" role="tooltip">${item.tip}</span>`;
+          chip.addEventListener('focusin',  () => chip.querySelector('.stk-tip').style.opacity = '1');
+          chip.addEventListener('focusout', () => chip.querySelector('.stk-tip').style.opacity = '');
+          cell.appendChild(chip);
+        });
+      }
+    }
+    stkCol.appendChild(cell);
+  });
+
+  /* Phase group banners */
+  const phaseGroups = [];
+  let cur = null;
+  STAGES.forEach(stage => {
+    if (!cur || cur.phase !== stage.phase) {
+      cur = { phase: stage.phase, count: 1 };
+      phaseGroups.push(cur);
+    } else {
+      cur.count++;
+    }
+  });
+  const groupRow = document.getElementById('phase-group-row');
+  phaseGroups.forEach(g => {
+    const el = document.createElement('div');
+    el.className = 'phase-group';
+    el.style.width = (g.count * 350) + 'px';
+    el.textContent = g.phase;
+    groupRow.appendChild(el);
+  });
+
+  /* Phase columns */
+  STAGES.forEach(stage => {
+    const col = document.createElement('div');
+    col.className = 'phase-col'; col.dataset.sid = stage.id;
+
+    /* Header */
+    const hdr = document.createElement('div');
+    hdr.className = 'phase-hdr';
+    hdr.setAttribute('role', 'columnheader');
+    hdr.innerHTML = `
+      <div class="phase-hdr-txt">
+        <h2 class="phase-name">${stage.name}</h2>
+        <div class="phase-sub">${stage.number}</div>
+      </div>
+      ${(STAGE_DEPS_RISKS[stage.id]) ? `<button class="phase-dr-btn has-items" data-sid="${stage.id}" aria-label="Dependencies and risks for ${stage.name}" title="Dependencies & Risks">⚑</button>` : ''}
+    `;
+    col.appendChild(hdr);
+
+    /* Lane cells */
+    LANES.forEach(lane => {
+      const cell = document.createElement('div');
+      cell.className = 'lane-cell ' + lane.cls;
+      cell.dataset.laneId = lane.id;
+      if (lane.conn) {
+        cell.style.height = lane.h + 'px';
+        const line = document.createElement('div'); line.className = 'conn-line';
+        const label = document.createElement('div'); label.className = 'conn-label'; label.textContent = lane.label;
+        cell.appendChild(line);
+        cell.appendChild(label);
+      } else {
+        const cards = stage.lanes[lane.id] || [];
+        if (!cards.length) cell.classList.add('empty');
+        cards.forEach(cd => cell.appendChild(buildCard(cd, stage)));
+      }
+      col.appendChild(cell);
+    });
+
+    body.appendChild(col);
+  });
+
+  setTimeout(() => { syncH(); setupResize(); }, 160);
+}
+
+/* ================================================================
+   CARD
+================================================================ */
+function buildCard(cd, stage) {
+  const p = PERSONAS.find(x => x.id === cd.personaId) || {};
+  const el = document.createElement('article');
+  el.className = 'card';
+  el.dataset.pid = cd.personaId;
+  el.dataset.cid = cd.id;
+  el.setAttribute('tabindex', '0');
+  el.setAttribute('role', 'button');
+  el.setAttribute('aria-label', `${cd.title} - ${p.name}. Press Enter to view details.`);
+
+  if (activeFilters.size > 0 && !activeFilters.has(cd.personaId)) el.classList.add('dimmed');
+
+  const badgeHTML = cd.badge ? `<span class="badge ${cd.badge==='AMR GATE'||cd.badge==='CONTROL GATE'?'badge-gate':'badge-fill'}">${cd.badge}</span>` : '';
+
+  el.innerHTML = `
+    ${cd.painPoint ? `<button class="pain-badge" aria-label="View pain point for ${cd.title}" aria-describedby="pain-pop-txt"><span aria-hidden="true">!</span></button>` : ''}
+    <div class="card-hdr">
+      <div class="card-av" style="background:${p.color||'#0D3B62'}" aria-hidden="true">${p.initials||''}</div>
+      <div class="card-meta">
+        <div class="card-title">${cd.title}</div>
+        <div class="card-plabel">${p.name}</div>
+      </div>
+      ${badgeHTML}
+    </div>
+    <p class="card-quote">${cd.quote}</p>
+  `;
+
+  if (cd.painPoint) {
+    el.querySelector('.pain-badge').addEventListener('click', e => {
+      e.stopPropagation();
+      showPainPop(e.currentTarget, cd.painPoint);
+    });
+    el.querySelector('.pain-badge').addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault(); e.stopPropagation();
+        showPainPop(e.currentTarget, cd.painPoint);
+      }
+    });
+  }
+
+  el.addEventListener('click', () => openModal(cd, p, stage, el));
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(cd, p, stage, el); }
+  });
+
+  return el;
+}
+
+/* ================================================================
+   SYNC LANE HEIGHTS
+================================================================ */
+function syncH() {
+  LANES.forEach(lane => {
+    if (lane.conn) return;
+    const cells = document.querySelectorAll(`.lane-cell[data-lane-id="${lane.id}"]`);
+    const stkCell = document.querySelector(`.stk-cell[data-lane-id="${lane.id}"]`);
+    let max = 0;
+    cells.forEach(c => { c.style.minHeight = ''; max = Math.max(max, c.scrollHeight); });
+    if (stkCell) max = Math.max(max, stkCell.scrollHeight);
+    cells.forEach(c => c.style.minHeight = max + 'px');
+    if (stkCell) stkCell.style.minHeight = max + 'px';
+  });
+}
+function setupResize() {
+  let t;
+  window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(syncH, 120); });
+}
+
+/* ================================================================
+   PAIN POPOVER
+================================================================ */
+const painPop = document.getElementById('pain-pop');
+const painTxt = document.getElementById('pain-pop-txt');
+let painTimer;
+
+function showPainPop(badge, text) {
+  clearTimeout(painTimer);
+  painTxt.textContent = text;
+  const r = badge.getBoundingClientRect();
+  let top  = r.bottom + 8;
+  let left = r.left - 120;
+  if (left < 8) left = 8;
+  if (left + 280 > window.innerWidth) left = window.innerWidth - 285;
+  if (top + 130 > window.innerHeight) top = r.top - 140;
+  painPop.style.top = top + 'px';
+  painPop.style.left = left + 'px';
+  painPop.classList.add('open');
+  painTimer = setTimeout(() => painPop.classList.remove('open'), 6000);
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.pain-badge')) painPop.classList.remove('open');
+});
+
+/* ================================================================
+   DEPS & RISKS POPOVER
+================================================================ */
+const drPop = document.getElementById('dr-pop');
+const drInner = document.getElementById('dr-pop-inner');
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.phase-dr-btn');
+  if (btn) {
+    e.stopPropagation();
+    const sid = btn.dataset.sid;
+    const stage = STAGES.find(s => s.id === sid);
+    const dr = STAGE_DEPS_RISKS[sid];
+    if (!stage || !dr) return;
+
+    let html = `<div class="dr-pop-title">${stage.name}</div>`;
+
+    if (dr.dependencies && dr.dependencies.length) {
+      html += `<div class="dr-section-label dep-label">Dependencies</div>`;
+      dr.dependencies.forEach(d => { html += `<div class="dr-item dep-item">${d}</div>`; });
+    }
+
+    if (dr.risks && dr.risks.length) {
+      html += `<div class="dr-section-label risk-label">Risks</div>`;
+      dr.risks.forEach(r => { html += `<div class="dr-item risk-item">${r}</div>`; });
+    }
+
+    /* Cross-cutting */
+    html += `<div class="dr-cross-label">System-Wide</div>`;
+    CROSS_CUTTING.dependencies.forEach(d => {
+      html += `<div class="dr-item dep-item" style="opacity:0.7;font-size:11px">${d}</div>`;
+    });
+    CROSS_CUTTING.risks.forEach(r => {
+      html += `<div class="dr-item risk-item" style="opacity:0.7;font-size:11px">${r}</div>`;
+    });
+
+    drInner.innerHTML = html;
+
+    /* Position below the button */
+    const rect = btn.getBoundingClientRect();
+    let top = rect.bottom + 8;
+    let left = rect.left - 150;
+    if (left < 8) left = 8;
+    if (left + 350 > window.innerWidth) left = window.innerWidth - 355;
+    if (top + 420 > window.innerHeight) top = rect.top - 430;
+    if (top < 8) top = 8;
+    drPop.style.top = top + 'px';
+    drPop.style.left = left + 'px';
+
+    /* Toggle */
+    const wasOpen = drPop.classList.contains('open') && drPop.dataset.sid === sid;
+    drPop.classList.remove('open');
+    if (!wasOpen) {
+      drPop.dataset.sid = sid;
+      requestAnimationFrame(() => drPop.classList.add('open'));
+    }
+    return;
+  }
+  if (!e.target.closest('.dr-pop')) {
+    drPop.classList.remove('open');
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && drPop.classList.contains('open')) drPop.classList.remove('open');
+});
+
+/* ================================================================
+   MODAL
+================================================================ */
+let _modalTrigger = null;
+
+function openModal(cd, p, stage, triggerEl) {
+  _modalTrigger = triggerEl || null;
+
+  const badgeHTML    = cd.badge ? `<span class="badge ${cd.badge==='AMR GATE'||cd.badge==='CONTROL GATE'?'badge-gate':'badge-fill'}" style="display:inline-block;margin-bottom:10px">${cd.badge}</span>` : '';
+  const painHTML     = cd.painPoint ? `<div class="modal-section">⚠ Pain Point</div><div class="modal-pain">${cd.painPoint}</div>` : '';
+  const customerHTML = stage.customerJourney ? `<div class="modal-section">Customer Impact</div><div class="modal-customer">${stage.customerJourney}</div>` : '';
+  const evidenceHTML = stage.evidence ? `<div class="modal-section">Key Evidence</div><div class="modal-evidence">${stage.evidence}</div>` : '';
+  const oppHTML      = stage.opportunity ? `<div class="modal-section">💡 Opportunity</div><div class="modal-opp">${stage.opportunity}</div>` : '';
+  const regHTML      = stage.regulations ? `<div class="modal-section">Regulatory Context</div><div class="modal-txt" style="font-size:12px;color:var(--text-muted)">${stage.regulations}</div>` : '';
+
+  document.getElementById('modal-inner').innerHTML = `
+    <div class="modal-stage-label">${stage.phase} · ${stage.number}</div>
+    ${badgeHTML}
+    <h2 class="modal-title" id="modal-title-text">${cd.title}</h2>
+    <div class="modal-section">Voice</div>
+    <p class="modal-txt" style="font-style:italic;padding-left:9px;border-left:3px solid #6BAADF">${cd.quote}</p>
+    <div class="modal-section">What's Happening</div>
+    <p class="modal-txt">${cd.detail||''}</p>
+    ${painHTML}
+    ${customerHTML}
+    ${oppHTML}
+    ${evidenceHTML}
+    ${regHTML}
+  `;
+
+  const wrap = document.getElementById('modal-wrap');
+  wrap.classList.add('open');
+  requestAnimationFrame(() => {
+    const closeBtn = document.querySelector('.modal-x');
+    if (closeBtn) closeBtn.focus();
+  });
+}
+
+function closeModal() {
+  document.getElementById('modal-wrap').classList.remove('open');
+  if (_modalTrigger) { _modalTrigger.focus(); _modalTrigger = null; }
+}
+
+function handleModalBg(e) {
+  if (e.target === document.getElementById('modal-wrap')) closeModal();
+}
+
+/* Focus trap */
+document.getElementById('modal-wrap').addEventListener('keydown', e => {
+  if (!document.getElementById('modal-wrap').classList.contains('open')) return;
+  if (e.key !== 'Tab') return;
+  const focusable = Array.from(
+    document.getElementById('modal-dialog').querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+  ).filter(el => !el.disabled);
+  if (!focusable.length) return;
+  const first = focusable[0], last = focusable[focusable.length - 1];
+  if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+  else { if (document.activeElement === last) { e.preventDefault(); first.focus(); } }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('modal-wrap').classList.contains('open')) closeModal();
+});
+
+build();
+</script>
+</body>
+</html>
